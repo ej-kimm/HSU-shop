@@ -6,6 +6,7 @@ import { addNewProduct } from '../api/firebase'
 export default function NewProduct() {
   const [product, setProduct] = useState({})
   const [file, setFile] = useState()
+  const [fileKey, setFileKey] = useState(Date.now())
   const [isUploading, setIsUploading] = useState(false)
   const [success, setSuccess] = useState(false)
 
@@ -28,6 +29,11 @@ export default function NewProduct() {
           .then(() => {
             setSuccess('성공적으로 제품이 추가되었습니다.')
             setTimeout(() => setSuccess(null), 4000)
+
+            // 입력폼 모두 지우기
+            setProduct({})
+            setFile(null)
+            setFileKey(Date.now())
           })
       })
       .finally(() => setIsUploading(false))
@@ -46,6 +52,7 @@ export default function NewProduct() {
       )}
       <form className="flex flex-col px-12 gap-1" onSubmit={handleSubmit}>
         <input
+          key={fileKey}
           type="file"
           accept="image/*"
           name="file"
