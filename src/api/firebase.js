@@ -4,6 +4,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  onAuthStateChanged,
 } from 'firebase/auth'
 
 const firebaseConfig = {
@@ -18,14 +19,16 @@ const auth = getAuth()
 const provider = new GoogleAuthProvider()
 
 export function login() {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const user = result.user
-      console.log(user)
-    })
-    .catch(console.error)
+  signInWithPopup(auth, provider).catch(console.error)
 }
 
 export function logout() {
   signOut(auth).catch(console.error)
+}
+
+// Auth observer
+export function onUserStateChange(callback) {
+  onAuthStateChanged(auth, (user) => {
+    callback(user)
+  })
 }
