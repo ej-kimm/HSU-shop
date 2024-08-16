@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { BsFillPencilFill } from 'react-icons/bs'
-import { login, logout, onUserStateChange } from '../api/firebase'
 import User from './User'
 import Button from './ui/Button'
+import { useAuthContext } from '../context/AuthContext'
 
 export default function Navbar() {
-  const [user, setUser] = useState()
-
-  useEffect(() => {
-    onUserStateChange(setUser)
-  }, [])
+  const { user, login, logout } = useAuthContext()
 
   return (
     <header className="flex justify-between border-b border-gray-300 p-2">
