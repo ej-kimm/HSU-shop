@@ -24,20 +24,27 @@ export default function NewProduct() {
     uploadImage(file)
       .then((url) => {
         // Firebase에 새로운 제품을 추가함
-        addNewProduct(product, url).then(() => {
-          setSuccess(true)
-          setTimeout(() => setSuccess(false), 3000)
-        })
+        addNewProduct(product, url) //
+          .then(() => {
+            setSuccess('성공적으로 제품이 추가되었습니다.')
+            setTimeout(() => setSuccess(null), 4000)
+          })
       })
       .finally(() => setIsUploading(false))
   }
 
   return (
-    <section>
-      <h2>새로운 제품 등록</h2>
-      {success && <p>✅성공적으로 제품이 추가되었습니다.</p>}
-      {file && <img src={URL.createObjectURL(file)} alt="local file" />}
-      <form className="flex flex-col" onSubmit={handleSubmit}>
+    <section className="w-full text-center mb-4">
+      <h2 className="text-2xl font-bold my-4">새로운 제품 등록</h2>
+      {success && <p className="my-2">✅ {success}</p>}
+      {file && (
+        <img
+          className="w-96 mx-auto mb-2"
+          src={URL.createObjectURL(file)}
+          alt="local file"
+        />
+      )}
+      <form className="flex flex-col px-12 gap-1" onSubmit={handleSubmit}>
         <input
           type="file"
           accept="image/*"
