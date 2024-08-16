@@ -4,12 +4,12 @@ export default function User({ user: { photoURL, displayName } }) {
   return (
     <div className="flex items-center shrink-0">
       <img
-        className="w-10 h-10 rounded-full md:mr-2"
+        className="w-10 h-10 rounded-full lg:mr-2"
         src={photoURL}
         alt={displayName}
         referrerPolicy="no-referrer"
       />
-      <span className="hidden md:block">{displayName}</span>
+      <span className="hidden lg:block">{displayName}</span>
     </div>
   )
 }
