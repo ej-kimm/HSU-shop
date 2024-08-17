@@ -72,3 +72,7 @@ export async function getProducts() {
       return []
     })
 }
+
+export async function addCart(userId, product) {
+  return set(ref(database, `carts/${userId}/${product.id}`), product)
+}
