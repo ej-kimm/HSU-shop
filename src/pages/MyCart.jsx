@@ -7,6 +7,7 @@ import { useAuthContext } from '../context/AuthContext'
 import { useQuery } from '@tanstack/react-query'
 import Button from '../components/ui/Button'
 import PriceCard from '../components/PriceCard'
+import { parseOptionQuantity } from '../util/quantity'
 
 const SHOPPING = 3000
 export default function MyCart() {
@@ -26,7 +27,7 @@ export default function MyCart() {
       (prev, current) =>
         prev +
         parseInt(current.price) *
-          parseInt(current.option.charAt(0)) *
+          parseOptionQuantity(current.option) *
           current.quantity,
       0
     )

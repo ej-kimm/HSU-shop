@@ -4,6 +4,7 @@ import { RiDeleteBin5Fill } from 'react-icons/ri'
 import { addOrUpdateToCart, removeFromCart } from '../api/firebase'
 import { useAuthContext } from '../context/AuthContext'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
+import { parseOptionQuantity } from '../util/quantity'
 
 export default function CartItem({
   product,
@@ -39,7 +40,7 @@ export default function CartItem({
         <div className="basis-2/3">
           <p className="text-lg">{title}</p>
           <p className="text-xl font-bold text-brand">{option}</p>
-          <p>₩{parseInt(price) * parseInt(option.charAt(0))}</p>
+          <p>₩{parseInt(price) * parseOptionQuantity(option)}</p>
         </div>
         <div className="text-2xl flex items-center">
           <AiOutlineMinusSquare
