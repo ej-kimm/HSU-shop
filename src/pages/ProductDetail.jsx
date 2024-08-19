@@ -1,27 +1,27 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Button from '../components/ui/Button'
-import { addOrUpdateToCart } from '../api/firebase'
-import { useAuthContext } from '../context/AuthContext'
+import useCart from '../hooks/useCart'
 
 export default function ProductDetail() {
+  const { addOrUpdateItem } = useCart()
   const {
     state: {
       product: { id, image, title, description, category, price, options },
     },
   } = useLocation()
-  const { uid } = useAuthContext()
   const [success, setSuccess] = useState()
   const [selected, setSelected] = useState(options && options[0])
 
   const handleSelect = (e) => setSelected(e.target.value)
   const handleClick = () => {
     const product = { id, image, title, price, option: selected, quantity: 1 }
-    addOrUpdateToCart(uid, product) //
-      .then(() => {
+    addOrUpdateItem.mutate(product, {
+      onSuccess: () => {
         setSuccess('장바구니에 추가되었습니다.')
         setTimeout(() => setSuccess(null), 3000)
-      })
+      },
+    })
   }
 
   return (

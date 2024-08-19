@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from '../components/ui/Button'
 import { uploadImage } from '../api/uploader'
-import { addNewProduct } from '../api/firebase'
+import useProducts from '../hooks/useProducts'
 
 export default function NewProduct() {
   const [product, setProduct] = useState({})
@@ -9,6 +9,7 @@ export default function NewProduct() {
   const [fileKey, setFileKey] = useState(Date.now())
   const [isUploading, setIsUploading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const { addProduct } = useProducts()
 
   const handleChange = (e) => {
     const { name, value, files } = e.target
@@ -21,20 +22,25 @@ export default function NewProduct() {
   const handleSubmit = (e) => {
     e.preventDefault()
     setIsUploading(true)
-    // 제품의 사진을 Cloudinary에 업로드 하고 URL을 획득
+    // 1. 제품의 사진을 Cloudinary에 업로드 하고 URL을 획득
     uploadImage(file)
       .then((url) => {
-        // Firebase에 새로운 제품을 추가함
-        addNewProduct(product, url) //
-          .then(() => {
-            setSuccess('성공적으로 제품이 추가되었습니다.')
-            setTimeout(() => setSuccess(null), 4000)
+        // 2. Firebase에 새로운 제품을 추가함
+        addProduct.mutate(
+          { product, url },
+          {
+            // 4. mutate가 다 되고나서 onSuccess 호출
+            onSuccess: () => {
+              setSuccess('성공적으로 제품이 추가되었습니다.')
+              setTimeout(() => setSuccess(null), 4000)
 
-            // 입력폼 모두 지우기
-            setProduct({})
-            setFile(null)
-            setFileKey(Date.now())
-          })
+              // 입력폼 모두 지우기
+              setProduct({})
+              setFile(null)
+              setFileKey(Date.now())
+            },
+          }
+        )
       })
       .finally(() => setIsUploading(false))
   }

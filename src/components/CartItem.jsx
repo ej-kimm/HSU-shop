@@ -1,9 +1,8 @@
 import React from 'react'
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
-import { addOrUpdateToCart, removeFromCart } from '../api/firebase'
-import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { parseOptionQuantity } from '../util/quantity'
+import useCart from '../hooks/useCart'
 
 const ICON_CLASS =
   'transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1'
@@ -11,22 +10,8 @@ const ICON_CLASS =
 export default function CartItem({
   product,
   product: { id, image, title, option, quantity, price },
-  uid,
 }) {
-  const queryClient = useQueryClient()
-
-  const addOrUpdateItem = useMutation({
-    mutationFn: (product) => addOrUpdateToCart(uid, product),
-    onSuccess: () => {
-      // 캐시된 데이터를 무효화하고, 최신 데이터를 가져옴
-      queryClient.invalidateQueries(['carts', uid])
-    },
-  })
-  const removeItem = useMutation({
-    mutationFn: (id) => removeFromCart(uid, id),
-    onSuccess: () => queryClient.invalidateQueries(['carts', uid]),
-  })
-
+  const { addOrUpdateItem, removeItem } = useCart()
   const handleMinus = () => {
     if (quantity < 2) return
     addOrUpdateItem.mutate({ ...product, quantity: quantity - 1 })
