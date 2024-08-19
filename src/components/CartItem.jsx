@@ -2,15 +2,17 @@ import React from 'react'
 import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 import { addOrUpdateToCart, removeFromCart } from '../api/firebase'
-import { useAuthContext } from '../context/AuthContext'
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { parseOptionQuantity } from '../util/quantity'
+
+const ICON_CLASS =
+  'transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1'
 
 export default function CartItem({
   product,
   product: { id, image, title, option, quantity, price },
+  uid,
 }) {
-  const { uid } = useAuthContext()
   const queryClient = useQueryClient()
 
   const addOrUpdateItem = useMutation({
@@ -43,16 +45,10 @@ export default function CartItem({
           <p>₩{parseInt(price) * parseOptionQuantity(option)}</p>
         </div>
         <div className="text-2xl flex items-center">
-          <AiOutlineMinusSquare
-            className="cursor-pointer"
-            onClick={handleMinus}
-          />
+          <AiOutlineMinusSquare className={ICON_CLASS} onClick={handleMinus} />
           <span>{quantity}</span>
-          <AiOutlinePlusSquare
-            className="cursor-pointer"
-            onClick={handlePlus}
-          />
-          <RiDeleteBin5Fill className="cursor-pointer" onClick={handleDelete} />
+          <AiOutlinePlusSquare className={ICON_CLASS} onClick={handlePlus} />
+          <RiDeleteBin5Fill className={ICON_CLASS} onClick={handleDelete} />
         </div>
       </div>
     </li>

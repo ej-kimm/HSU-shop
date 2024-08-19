@@ -10,6 +10,7 @@ import PriceCard from '../components/PriceCard'
 import { parseOptionQuantity } from '../util/quantity'
 
 const SHOPPING = 3000
+
 export default function MyCart() {
   const { uid } = useAuthContext()
 
@@ -41,15 +42,16 @@ export default function MyCart() {
       {hasProducts && (
         <>
           <ul className="border-b border-gray-300 mb-8 p-4 px-8">
-            {products.map((product) => (
-              <CartItem key={product.id} product={product} />
-            ))}
+            {products &&
+              products.map((product) => (
+                <CartItem key={product.id} product={product} uid={uid} />
+              ))}
           </ul>
-          <div className="flex justify-between items-center mb-8 p-2 md:px-8 lg-px-16">
+          <div className="flex justify-between items-center mb-6 px-2 md:px-8 lg:px-16">
             <PriceCard text={'상품 총액'} price={totalPrice} />
-            <BsFillPlusCircleFill />
+            <BsFillPlusCircleFill className="shrink-0" />
             <PriceCard text={'배송액'} price={SHOPPING} />
-            <FaEquals />
+            <FaEquals className="shrink-0" />
             <PriceCard text={'총가격'} price={totalPrice + SHOPPING} />
           </div>
           <Button text={'주문하기'} />
