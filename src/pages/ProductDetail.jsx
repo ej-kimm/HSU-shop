@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Button from '../components/ui/Button'
 import useCart from '../hooks/useCart'
+import { useAuthContext } from '../context/AuthContext'
 
 export default function ProductDetail() {
+  const { user, login } = useAuthContext()
   const { addOrUpdateItem } = useCart()
   const {
     state: {
@@ -15,6 +17,10 @@ export default function ProductDetail() {
 
   const handleSelect = (e) => setSelected(e.target.value)
   const handleClick = () => {
+    if (!user) {
+      login()
+      return
+    }
     const product = { id, image, title, price, option: selected, quantity: 1 }
     addOrUpdateItem.mutate(product, {
       onSuccess: () => {
